@@ -1,0 +1,297 @@
+/* Style général du chatbot */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px 0; /* Espace en haut et en bas */
+}
+
+#chatbot-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 550px;
+    flex-direction: column;
+    gap: 20px; /* Espace autour du chatbot */
+    padding: 0 20px; /* Espace à gauche et à droite */
+}
+
+
+#chatbot {
+    width: 100%;
+    max-width: 400px; /* Ajustement pour s'adapter aux écrans */
+    height: 80vh; /* Ajustement dynamique selon la hauteur de l'écran */
+    max-height: 650px;
+    border-radius: 25px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #6e00ff, #8c52ff);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 5px solid rgba(255, 255, 255, 0.2);
+    padding: 10px;
+}
+
+/* Style de la zone de chat */
+#chatbox {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%; /* ✅ Assure que le conteneur occupe toute la largeur */
+}
+
+.bot-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: url('/static/images/bot-avatar.png') no-repeat center/cover;
+    flex-shrink: 0;
+    background-color: transparent; /* ✅ Fond transparent pour l'avatar */
+}
+
+.message {
+    max-width: 75%;
+    padding: 12px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: normal; 
+    word-wrap: break-word;
+}
+
+
+
+.bot {
+    align-self: flex-start;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-container, .user-choice {
+    display: flex;
+    justify-content: flex-end; /* ✅ Force l'alignement à droite */
+    width: 100%;
+    margin-top: 5px;
+}
+
+.user, .user-choice div {
+    background-color: #8c52ff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 75%;
+    text-align: right;
+    border: none;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    width: fit-content;
+
+}
+
+
+/* Alignement des entrées utilisateur (texte et choix) à droite */
+.user-input {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.user-input div {
+    background-color: #8c52ff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 75%;
+    text-align: right;
+    border: none;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    width: fit-content;
+}
+
+.home-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.home-button {
+    background: #8c52ff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.home-button:hover {
+    background: #6e00ff;
+}
+
+
+
+/* Animation des trois points pour le "bot typing" */
+.typing-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* ✅ Sépare l'avatar de la bulle */
+}
+
+.typing {
+    display: flex;
+    gap: 3px;
+    padding: 10px;
+    background: #f4f4f4;
+    border-radius: 15px;
+    align-items: center;
+    justify-content: center;
+    width: fit-content; /* ✅ La bulle s'ajuste aux trois points */
+    min-width: 40px;
+}
+
+.typing span {
+    width: 6px;
+    height: 6px;
+    background: #8c52ff;
+    border-radius: 50%;
+    animation: typing-animation 1.5s infinite;
+}
+
+.typing span:nth-child(1) {
+    animation-delay: 0s;
+}
+.typing span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.typing span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing-animation {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+}
+
+/* Options de choix */
+.options-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+}
+
+.options-container button {
+    background: white;
+    color: #8c52ff;
+    border: 2px solid #8c52ff;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.options-container button:hover {
+    background: #8c52ff;
+    color: white;
+}
+
+/* Input utilisateur */
+.input-container {
+    display: flex;
+    padding: 5px;
+    background: #fff;
+    border-top: 1px solid #eee;
+    border-radius: 20px 20px 0px 20px;
+}
+
+.input-container input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.input-container button {
+    background: #8c52ff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.input-container button:hover {
+    background: #6e00ff;
+}
+
+.file-upload {
+    display: none; /* Cache le champ input natif */
+}
+
+/* Conteneur de l'upload */
+.file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    padding: 0;
+    border: none;
+}
+
+/* Masque l'input file */
+.file-upload
+
+
+.file-upload-wrapper:hover {
+    background: #f0f0f0;
+}
+
+.custom-file-label {
+    background: #cc00ff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-file-label:hover {
+    background: #a609ce;
+}
+
+.file-status {
+    font-size: 14px;
+    color: #6e00ff;
+    font-weight: bold;
+}

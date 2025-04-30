@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: melbot
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    envVars:
+      - key: EMAIL_USER
+        fromDotEnv: true
+      - key: EMAIL_PASSWORD
+        fromDotEnv: true
+      - key: EMAIL_HOST
+        fromDotEnv: true
+      - key: EMAIL_PORT
+        fromDotEnv: true
+      - key: NOTION_API_KEY
+        fromDotEnv: true
+      - key: DATABASE_ID
+        fromDotEnv: true
