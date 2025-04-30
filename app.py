@@ -9,8 +9,11 @@ from email.mime.text import MIMEText
 import smtplib
 import locale
 
-locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')  # Pour Linux/Mac
-# locale.setlocale(locale.LC_TIME, 'fr_FR')  # Pour Windows si UTF-8 pose souci
+try:
+    locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+except locale.Error:
+    pass  # Render n'a pas cette locale
+
 
 
 # ✅ Chargement des variables d'environnement
