@@ -27,8 +27,8 @@ EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
-ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", EMAIL_USER)  # ou une adresse fixe si tu préfères
-ALLOWED_EMAILS = os.getenv("ALLOWED_EMAILS", "@fra.mee.com")  # Un seul domaine autorisé
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
+ALLOWED_EMAILS = os.getenv("ALLOWED_EMAILS", "@fra.mee.com")
 
 
 # 📋 Configuration Notion
@@ -92,12 +92,17 @@ def send_to_notion():
                      responses.get("changement_ajout", "") or \
                      responses.get("new_distri_realloc", "Non spécifié")
                      
-    # ✉️ Envoi de l'e-mail
-    send_email(
-        to_email=responses.get("email", ""),
-        subject=f"Confirmation de ta demande - {ticket_id}",
-        body=f"Bonjour {responses.get('prenom', '')},\n\nTa demande a bien été enregistrée sous l'identifiant {ticket_id}.\n\nRécapitulatif :\nType de demande : {responses.get('type_demande', '')}\nDétail : {detail_complet}\n\nMerci pour ta demande.\nL'équipe."
-    )
+    user_email = responses.get("email", "").strip()
+
+    if user_email:
+        send_email(
+            to_email=user_email,
+            subject=f"Confirmation de ta demande - {ticket_id}",
+            body=f"Bonjour {responses.get('prenom', '')},\n\nTa demande a bien été enregistrée sous l'identifiant {ticket_id}.\n\nRécapitulatif :\nType de demande : {responses.get('type_demande', '')}\nDétail : {detail_complet}\n\nMerci pour ta demande.\nL'équipe."
+        )
+    else:
+        print("❌ Aucun email utilisateur renseigné, envoi annulé.")
+
 
     # 📝 Préparation des données à envoyer à Notion
     notion_payload = {
