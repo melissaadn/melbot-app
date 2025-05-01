@@ -45,16 +45,20 @@ def index():
 
 @app.route("/submit_email", methods=["POST"])
 def submit_email():
-    data = request.json
-    email = data.get("email", "").strip()
+    try:
+        data = request.get_json(force=True)  # <-- Ajout du force=True pour s'assurer qu'on obtient du JSON
+        email = data.get("email", "").strip()
 
-    if not re.match(r"^[a-zA-Z0-9._%+-]+@fra\.mee\.com$", email):
-        return jsonify({"error": "Email non autorisé"}), 403
+        if not re.match(r"^[a-zA-Z0-9._%+-]+@fra\.mee\.com$", email):
+            return jsonify({"error": "Email non autorisé"}), 403
 
-    # Tu peux stocker l'email en session si besoin
-    session["user_email"] = email
+        session["user_email"] = email
+        return jsonify({"success": True})
 
-    return jsonify({"success": True})
+    except Exception as e:
+        print(f"❌ Erreur dans /submit_email : {e}")
+        return jsonify({"error": "Erreur interne"}), 500
+
 
 
 # 📁 Configuration du dossier d'upload sécurisé
