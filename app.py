@@ -65,12 +65,6 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 # 📧 Liste des emails autorisés
 ALLOWED_EMAILS = ["@fra.mee.com"]
 
-# 📂 Types de fichiers autorisés (MIME)
-ALLOWED_MIME_TYPES = [
-    "application/vnd.ms-excel",  # XLS
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  # XLSX
-]
-
 
 
 # 📤 Route pour envoyer les données à Notion
@@ -95,30 +89,23 @@ def send_to_notion():
     user_email = responses.get("email", "").strip()
 
     # ✅ Envoi de l'e-mail à l'utilisateur
-    estimated_week = data.get("estimatedWeek", "non précisé")
-
     if user_email:
+        estimated_week = data.get("estimatedWeek", "Non défini")
         send_email(
             to_email=user_email,
             subject=f"Confirmation de ta demande - {ticket_id}",
-            body=f"""Bonjour {responses.get('prenom', '')},
-
-Ta demande a bien été enregistrée sous l'identifiant :
-🆔 {ticket_id}
-
-📝 Détail de ta demande :
-Type : {responses.get('type_demande', '')}
-Description : {detail_complet}
-
-📅 Délai estimé de traitement : {estimated_week}
-
-Merci pour ta demande ! Tu seras notifié(e) dès qu’il y aura du nouveau.
-
-À bientôt,
-Melbot 🤖"""
+            body=(
+                f"Bonjour {responses.get('prenom', '')},\n\n"
+                f"Ta demande a bien été enregistrée sous l'identifiant {ticket_id}.\n\n"
+                f"📌 Type de demande : {responses.get('type_demande', '')}\n"
+                f"📝 Détail : {detail_complet}\n"
+                f"📅 Délai estimé de traitement : Semaine du {estimated_week}\n\n"
+                f"Merci pour ta demande.\nMelbot 🤖"
+            )
         )
     else:
         print("❌ Aucun email utilisateur renseigné, envoi annulé.")
+
 
 
     # 🛎️ Notification à l'admin
@@ -216,7 +203,10 @@ def get_estimated_week():
     from datetime import datetime, timedelta
     current_date = datetime.now()
     estimated_date = current_date + timedelta(weeks=weeks_needed)
-    estimated_week_str = estimated_date.strftime("%d %B %Y") 
+    months_fr = ["janvier", "février", "mars", "avril", "mai", "juin",
+             "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
+    estimated_week_str = f"{estimated_date.day} {months_fr[estimated_date.month - 1]} {estimated_date.year}"
+
 
     return jsonify({"estimatedWeek": estimated_week_str})
 
