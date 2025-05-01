@@ -27,7 +27,7 @@ EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
-
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", EMAIL_USER)  # ou une adresse fixe si tu préfères
 ALLOWED_EMAILS = os.getenv("ALLOWED_EMAILS", "@fra.mee.com")  # Un seul domaine autorisé
 
 
@@ -92,12 +92,12 @@ def send_to_notion():
                      responses.get("changement_ajout", "") or \
                      responses.get("new_distri_realloc", "Non spécifié")
                      
-    # # ✉️ Envoi de l'e-mail
-    # send_email(
-    #     to_email=responses.get("email", ""),
-    #     subject=f"Confirmation de ta demande - {ticket_id}",
-    #     body=f"Bonjour {responses.get('prenom', '')},\n\nTa demande a bien été enregistrée sous l'identifiant {ticket_id}.\n\nRécapitulatif :\nType de demande : {responses.get('type_demande', '')}\nDétail : {detail_complet}\n\nMerci pour ta demande.\nL'équipe."
-    # )
+    # ✉️ Envoi de l'e-mail
+    send_email(
+        to_email=responses.get("email", ""),
+        subject=f"Confirmation de ta demande - {ticket_id}",
+        body=f"Bonjour {responses.get('prenom', '')},\n\nTa demande a bien été enregistrée sous l'identifiant {ticket_id}.\n\nRécapitulatif :\nType de demande : {responses.get('type_demande', '')}\nDétail : {detail_complet}\n\nMerci pour ta demande.\nL'équipe."
+    )
 
     # 📝 Préparation des données à envoyer à Notion
     notion_payload = {
@@ -137,15 +137,6 @@ def send_to_notion():
     "notion_response": response.json(),
     "notion_ticket_id": ticket_id  
 }), response.status_code
-
-@app.route("/test_email")
-def test_email():
-    send_email(
-        to_email="melissa.aydin@fra.mee.com",
-        subject="Test Melbot",
-        body="Ceci est un test d'envoi d'email depuis Render via Gmail."
-    )
-    return "✅ Email envoyé (si tout va bien)"
 
 
 @app.route("/get_estimated_week", methods=["GET"])
