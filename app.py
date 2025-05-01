@@ -94,14 +94,47 @@ def send_to_notion():
                      
     user_email = responses.get("email", "").strip()
 
+    # ✅ Envoi de l'e-mail à l'utilisateur
+    estimated_week = data.get("estimatedWeek", "non précisé")
+
     if user_email:
         send_email(
             to_email=user_email,
             subject=f"Confirmation de ta demande - {ticket_id}",
-            body=f"Bonjour {responses.get('prenom', '')},\n\nTa demande a bien été enregistrée sous l'identifiant {ticket_id}.\n\nRécapitulatif :\nType de demande : {responses.get('type_demande', '')}\nDétail : {detail_complet}\n\nMerci pour ta demande.\nL'équipe."
+            body=f"""Bonjour {responses.get('prenom', '')},
+
+Ta demande a bien été enregistrée sous l'identifiant :
+🆔 {ticket_id}
+
+📝 Détail de ta demande :
+Type : {responses.get('type_demande', '')}
+Description : {detail_complet}
+
+📅 Délai estimé de traitement : {estimated_week}
+
+Merci pour ta demande ! Tu seras notifié(e) dès qu’il y aura du nouveau.
+
+À bientôt,
+Melbot 🤖"""
         )
     else:
         print("❌ Aucun email utilisateur renseigné, envoi annulé.")
+
+
+    # 🛎️ Notification à l'admin
+    if ADMIN_EMAIL:
+        send_email(
+            to_email=ADMIN_EMAIL,
+            subject=f"[MELBOT] Nouvelle demande - {ticket_id}",
+            body=f"""Nouvelle demande soumise.
+
+Prénom : {responses.get('prenom', '')}
+Type de demande : {responses.get('type_demande', '')}
+Détail : {detail_complet}
+Email utilisateur : {user_email}
+"""
+        )
+
 
 
     # 📝 Préparation des données à envoyer à Notion
@@ -187,22 +220,6 @@ def get_estimated_week():
 
     return jsonify({"estimatedWeek": estimated_week_str})
 
-
-# 📩 Route pour gérer la soumission du formulaire et envoyer les emails
-@app.route("/submit", methods=["POST"])
-def submit():
-    data = request.json
-    user_email = data.get("email")
-    details = data.get("details")  # Contenu du formulaire
-    ticket_id = f"TICKET-{uuid.uuid4().hex[:8]}"  # Génération d'un ID unique
-
-    # Envoi d'un email de confirmation à l'utilisateur
-    send_email(user_email, "Votre demande a été reçue", f"Votre demande a été enregistrée sous l'identifiant {ticket_id}.")
-
-    # Notification à l'admin
-    send_email(ADMIN_EMAIL, "Nouvelle demande reçue", f"Une nouvelle demande a été soumise : {details}")
-
-    return jsonify({"message": "Demande enregistrée", "ticket_id": ticket_id})
 
 
 def send_email(to_email, subject, body):
