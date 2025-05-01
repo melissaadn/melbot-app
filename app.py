@@ -138,6 +138,15 @@ def send_to_notion():
     "notion_ticket_id": ticket_id  
 }), response.status_code
 
+@app.route("/test_email")
+def test_email():
+    send_email(
+        to_email="melissa.aydin@fra.mee.com",
+        subject="Test Melbot",
+        body="Ceci est un test d'envoi d'email depuis Render via Gmail."
+    )
+    return "✅ Email envoyé (si tout va bien)"
+
 
 @app.route("/get_estimated_week", methods=["GET"])
 def get_estimated_week():
