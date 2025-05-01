@@ -623,7 +623,10 @@ function runStep(step) {
         } else {
             console.log("✅ Fin du parcours, envoi des données...");
             sendDataToDatabase();
-            setTimeout(showHomeButton, 500);
+            if (step === "end") {
+                setTimeout(showHomeButton, 500);
+            }
+            
         }
     }, 400);  // ✅ Délai après affichage du message
 }, 1000);
